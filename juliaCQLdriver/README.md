@@ -11,13 +11,18 @@ Now, it's probably easy to extend this package to enable other features, but I h
 The way to use this package is:
 ```
 julia> session, cluster, err = cqlinit("127.0.0.1")
+
 julia> table = "data.testtable"
-julia> data = ["hello", 1, now()]
+julia> data = [["hello", 1, now()],
+               ["lolol", 2, now()]]
 julia> colnames = ["msg", "num", "timestamp"]
+
 julia> err = cqlasyncwrite(session, table, colnames, data)
 
 julia> query = "SELECT DISTINCT vals FROM data.test LIMIT 1000000"
+
 julia> err, result = cqlread(session, query)
 
 julia> cqlclose(session, cluster)
 ```
+Functions return `err::Int16` codes which are 0x0000 if things are good, and something else if there's a problem.
